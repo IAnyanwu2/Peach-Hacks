@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { spawn } = require('child_process');
 const path = require('path');
+require('dotenv').config();  // Load environment variables
 
 const app = express();
 const port = 5000;
@@ -15,7 +16,8 @@ app.post('/api/analyze', (req, res) => {
   const { fen, depth } = req.body;
 
   // Path to Stockfish executable (change it if necessary)
-  const enginePath = path.join('C:', 'Users', 'Ikean', 'peach-hack', 'engine', 'stockfish-windows-x86-64-avx2.exe');  console.log('Starting Stockfish at:', enginePath);
+  const enginePath = path.join('C:', 'Users', 'Ikean', 'peach-hack', 'engine', 'stockfish-windows-x86-64-avx2.exe');  
+  console.log('Starting Stockfish at:', enginePath);
   const stockfish = spawn(enginePath);
 
   let bestMove = '';
