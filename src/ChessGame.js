@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Chess } from 'chess.js';
-import Chessboard3D from './Chessboard3D'; // Import your 3D chessboard component
+import Chessboard3D from './components/Chessboard3D';
 import { Canvas } from '@react-three/fiber';
 
 function ChessGameApp() {
@@ -80,8 +80,10 @@ function ChessGameApp() {
         )}
       </div>
 
-      {/* Render the 3D chessboard */}
-      <Chessboard3D fen={fen} onPieceDrop={onPieceDrop} />
+      {/* Wrap the 3D chessboard in Canvas */}
+      <Canvas>
+        <Chessboard3D fen={fen} onPieceDrop={onPieceDrop} />
+      </Canvas>
 
       {/* AI move button for testing (optional) */}
       <button

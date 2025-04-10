@@ -1,14 +1,14 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-const Chessboard3D = ({ fen, onPieceDrop }) => {
-  const gltf = useLoader(GLTFLoader, '/chessboard/chess_board.glb'); // Your GLB file path
+const Chessboard3D = ({ fen }) => {
+  const gltf = useLoader(GLTFLoader, '/chess_board.glb'); // Your GLB file path
   const chessboardRef = useRef();
 
   useEffect(() => {
-    // You can update the chessboard based on the FEN if necessary
-    // Example: Translate pieces based on FEN, animate, etc.
+    // You might want to manipulate the pieces based on the new FEN here if needed.
+    // If the pieces are part of the GLB and correctly positioned, you may not need any additional logic.
   }, [fen]);
 
   return (
