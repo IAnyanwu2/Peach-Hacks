@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import ChessGameApp from './ChessMoveApp'; // Import ChessGameApp
+import ChessGameApp from './ChessGame';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
