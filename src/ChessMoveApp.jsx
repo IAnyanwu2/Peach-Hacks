@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { Chess } from 'chess.js';
-import ChessMoveFetcher from './components/chessmove';
 
-// Initialize chess.js
 const chess = new Chess();
 
-const App = () => {
+const ChessMoveApp = () => {
   const [fen, setFen] = useState(chess.fen()); // Use chess.js FEN
   const [bestMove, setBestMove] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -73,4 +71,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default ChessMoveApp;
