@@ -15,8 +15,7 @@ app.post('/api/analyze', (req, res) => {
   const { fen, depth } = req.body;
 
   // Path to Stockfish executable (change it if necessary)
-  const enginePath = path.join(__dirname, '..', 'engine', 'stockfish-windows-x86-64-avx2.exe');
-  console.log('Starting Stockfish at:', enginePath);
+  const enginePath = path.join(__dirname, '..', 'engine', 'stockfish', 'stockfish-windows-x86-64-avx2.exe');  console.log('Starting Stockfish at:', enginePath);
   const stockfish = spawn(enginePath);
 
   let bestMove = '';
