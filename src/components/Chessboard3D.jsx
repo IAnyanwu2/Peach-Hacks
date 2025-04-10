@@ -1,21 +1,20 @@
-import { Canvas } from '@react-three/fiber';
+import { useRef, useEffect } from 'react';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import React from 'react';
 
-const Chessboard3D = () => {
-  const gltf = useLoader(GLTFLoader, '/chess_board.glb');
+const Chessboard3D = ({ fen }) => {
+  const gltf = useLoader(GLTFLoader, '/chess_board.glb'); // Path to model in public/
+  const chessboardRef = useRef();
+
+  useEffect(() => {
+    // Optional: Update 3D scene based on new FEN here
+  }, [fen]);
+
   return (
-    <primitive object={gltf.scene} scale={0.5} position={[0, 0, 0]} />
+    <group ref={chessboardRef}>
+      <primitive object={gltf.scene} />
+    </group>
   );
 };
 
-export default function App() {
-  return (
-    <Canvas camera={{ position: [0, 5, 10], fov: 50 }}>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[2, 5, 5]} />
-      <Chessboard3D />
-    </Canvas>
-  );
-}
+export default Chessboard3D;
