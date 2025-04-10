@@ -1,44 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
 import { Chess } from 'chess.js';
 import Chessboard3D from './components/Chessboard3D';
+import ChessMoveApp from './ChessMoveApp'; // Import ChessMoveApp
 
 function ChessGameApp() {
   const [game, setGame] = useState(new Chess());
   const [fen, setFen] = useState(game.fen());
-  const [loading, setLoading] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
 
-  const fetchBestMove = async (fen) => {
-    try {
-      const res = await fetch('http://localhost:5000/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fen, depth: 10 }),
-      });
+  // Update the game state with the best move
+  const handleMove = (bestMove) => {
+    const newGame = new Chess(game.fen()); // Clone current game state
+    newGame.move(bestMove);
+    setGame(newGame);
+    setFen(newGame.fen());
 
-      const data = await res.json();
-      return data.bestMove;
-    } catch (err) {
-      console.error('Error fetching best move:', err);
-      return null;
+    if (newGame.game_over()) {
+      setGameOver(true);
+      setWinner(newGame.turn() === 'w' ? 'Black' : 'White');
     }
   };
 
-  const makeAIMove = async () => {
-    setLoading(true);
-    const bestMove = await fetchBestMove(fen);
-    if (bestMove) {
-      const newGame = new Chess(game.fen()); // Safer clone
-      newGame.move(bestMove);
-      setGame(newGame);
-      setFen(newGame.fen());
-    }
-    setLoading(false);
-  };
-
+  // Handle piece drop
   const onPieceDrop = (newFen) => {
     const newGame = new Chess();
     newGame.load(newFen);
@@ -48,11 +33,10 @@ function ChessGameApp() {
     if (newGame.game_over()) {
       setGameOver(true);
       setWinner(newGame.turn() === 'w' ? 'Black' : 'White');
-    } else {
-      setTimeout(makeAIMove, 500);
     }
   };
 
+  // Restart the game
   const restartGame = () => {
     const freshGame = new Chess();
     setGame(freshGame);
@@ -73,23 +57,18 @@ function ChessGameApp() {
           </div>
         )}
       </div>
-
-      <Canvas camera={{ position: [0, 5, 10], fov: 50 }}>
+      
+      {/* Render the 3D Chessboard */}
+      <Canvas camera={{ position: [0, 8, 31.8], fov: 60, near: 1, far: 60 }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} />
         <Chessboard3D fen={fen} onPieceDrop={onPieceDrop} />
-        <OrbitControls />
       </Canvas>
-
-      <button
-        onClick={makeAIMove}
-        disabled={loading || gameOver}
-        className="ai-move-btn"
-      >
-        {loading ? 'AI is thinking...' : 'Make AI Move'}
-      </button>
+      
+      {/* Render ChessMoveApp (No need for an additional h1 here) */}
+      <ChessMoveApp fen={fen} onMove={handleMove} />
     </div>
   );
 }
 
-export default ChessGameApp;
+export default ChessGameApp;  

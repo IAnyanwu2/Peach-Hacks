@@ -1,17 +1,13 @@
 import { useState } from 'react';
-import { Chess } from 'chess.js';
 
-const chess = new Chess();
-
-const ChessMoveApp = () => {
-  const [fen, setFen] = useState(chess.fen()); // Use chess.js FEN
+const ChessMoveApp = ({ onMove, fen }) => {  // Accept fen as a prop
   const [bestMove, setBestMove] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const validateAndFetchBestMove = async () => {
-    // Use chess.js to validate the position or move
-    if (!chess.validate_fen(fen)) {
-      console.error('Invalid FEN');
+    // Check if FEN is provided
+    if (!fen) {
+      console.error('FEN is required');
       return;
     }
 
@@ -24,13 +20,14 @@ const ChessMoveApp = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          fen: fen,  // Send current FEN
+          fen: fen,  // Send the current FEN as a prop
           depth: 10, // Depth for analysis (can be dynamic)
         }),
       });
 
       const data = await res.json();
       setBestMove(data.bestMove); // Set the best move from the response
+      onMove(data.bestMove);  // Call onMove callback to update the parent component's state
     } catch (error) {
       console.error('Error fetching best move:', error);
     } finally {
@@ -40,20 +37,7 @@ const ChessMoveApp = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold">Chess AI - Best Move</h1>
-
-      <div>
-        <label>
-          FEN Position:
-          <input
-            type="text"
-            value={fen}
-            onChange={(e) => setFen(e.target.value)}
-            className="p-2 border rounded"
-          />
-        </label>
-      </div>
-
+      {/* Removed the duplicate heading here */}
       <button
         onClick={validateAndFetchBestMove}
         disabled={loading}
