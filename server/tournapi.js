@@ -1,7 +1,7 @@
 const axios = require('axios');
-require('dotenv').config();
 
-const API_KEY = process.env.CHALLONGE_API_KEY;
+// Directly set the API key here temporarily for testing
+const API_KEY = 'zJXL8Mm4EVRVxRCXM8slvxmo60KjyCkJYapE5r7o'
 const BASE_URL = 'https://api.challonge.com/v1';
 
 const createTournament = async (req, res) => {
